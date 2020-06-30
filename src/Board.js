@@ -16,11 +16,22 @@ class Board extends Component {
     }
 
     handlePlayTurn = (row, col) => {
-        console.log(row, col);
-        let newState = this.state.gameState;
-        newState[row][col] = this.state.isX ? "X" : "O"
-        this.setState({gameState: newState, isX: !this.state.isX})
+        const { gameState } = this.state;
+        if (gameState[row][col]) return;
+        let newState = gameState;
+        newState[row][col] = this.state.isX ? "X" : "O";
+        // checkWinner(newState)
+        this.setState({ gameState: newState, isX: !this.state.isX });
     };
+
+    // checkWinner = (gameState) => {
+    //     for (let i = 0; i < parseInt(this.boardSize); i++) {
+    //         let prev = gameState[i][]
+    //         for (let j = 0; j < parseInt(this.boardSize); j++) {
+    //             if (gameState[i][j])
+    //         }
+    //     }
+    // }
 
     getStyle = () => {
         return `{display: grid; grid-template-columns: repeat(${parseInt(
@@ -36,27 +47,30 @@ class Board extends Component {
         // )
         let count = 0;
         return (
-            <div
-                style={{
-                    display: "grid",
-                    gridTemplateColumns: `repeat(${parseInt(
-                        this.boardSize
-                    )}, 1fr)`,
-                    gridGap: "0",
-                    width: "100px",
-                }}
-            >
-                {this.state.gameState.map((t, i) =>
-                    t.map((u, j) => (
-                        <Cell
-                            cellNum={count++}
-                            playTurn={this.handlePlayTurn}
-                            value={this.state.gameState[i][j]}
-                            row={i}
-                            col={j}
-                        />
-                    ))
-                )}
+            <div>
+                <div
+                    style={{
+                        display: "grid",
+                        gridTemplateColumns: `repeat(${parseInt(
+                            this.boardSize
+                        )}, 1fr)`,
+                        gridGap: "0",
+                        width: "100px",
+                    }}
+                >
+                    {this.state.gameState.map((t, i) =>
+                        t.map((u, j) => (
+                            <Cell
+                                cellNum={count++}
+                                playTurn={this.handlePlayTurn}
+                                value={this.state.gameState[i][j]}
+                                row={i}
+                                col={j}
+                            />
+                        ))
+                    )}
+                </div>
+                <p>{this.state.isX ? "Player X's turn" : "Player O's turn"}</p>
             </div>
         );
     }
